@@ -19,6 +19,7 @@ if(typeof args[0] != "undefined"){
   var streamkey = makeid(8);
 }
 
-var encrypted = CryptoJS.SHA256(config.passphrase+"/live/"+streamkey);
+var encrypted = CryptoJS.SHA256(config.passphrase+"/live/"+streamkey).toString();
+var encshort = encrypted.substring(0,6);
 
-console.log(streamkey+"?pwd="+encrypted);
+console.log(streamkey+"?pwd="+encshort);
