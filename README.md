@@ -1,1 +1,1 @@
-Detailed installation instructions at https://medianet.work/docs/ms-setup
+Detailed installation instructions at https://docs.medianet.work/ms-setup
