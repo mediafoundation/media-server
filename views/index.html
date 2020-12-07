@@ -1,0 +1,1044 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="description" content="Create your own livestream channel and share it with the world. Unlimited concurrent users. Free. Censorship resistant." />
+    <meta name="keywords" content="streaming,live,video,uncensored,unrestricted,blockchain,cryptography,mining,earn,farm,rewards,token,defi,p2p,peer to peer" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/favicons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/static/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/static/favicons/favicon-16x16.png">
+    <link rel="manifest" href="/static/favicons/site.webmanifest">
+    <link rel="mask-icon" href="/static/favicons/safari-pinned-tab.svg" color="#343434">
+    <link rel="shortcut icon" href="/static/favicons/favicon.ico">
+    <meta name="msapplication-TileColor" content="#000000">
+    <meta name="msapplication-config" content="/static/favicons/browserconfig.xml">
+    <meta name="theme-color" content="#000000">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <title>Media Server Express | Decentralized live streaming.</title>
+    <style>
+      html {
+        overflow-y: scroll;
+      }
+      body{
+        background: black;
+        color:#fff;
+        font-family: 'Inter', -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+        margin:0;
+      }
+      a {
+        color:rgb(226, 226, 226);
+        text-decoration: none;
+        -webkit-transition: .15s color;
+        transition: .15s color;
+      }
+      a:hover {
+        color:#fff;
+      }
+      .wrap {
+          box-sizing: border-box;
+          margin: 0 auto;
+          min-width: 0;
+          background-color: #000;
+          min-height: 100vh;
+          max-width: 1360px;
+      }
+      header {
+          width: 100%;
+          height: 90px;
+          position: -webkit-sticky;
+          position: sticky;
+          top: 0;
+          z-index: 1000;
+          transition: background 0.5s;
+      }
+      .scrolling {
+          background-color: rgba(0, 0, 0, 0.5);
+          backdrop-filter: saturate(180%) blur(5px);
+          -webkit-backdrop-filter: saturate(180%) blur(5px);
+      }
+      header .content {
+        box-sizing: border-box;
+        margin: 0;
+        min-width: 0;
+        width: 100%;
+        max-width: container;
+        margin-left: auto;
+        margin-right: auto;
+        margin-left: auto;
+        margin-right: auto;
+        padding-left: 16px;
+        padding-right: 16px;
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-align-items: center;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+        -webkit-box-pack: justify;
+        -webkit-justify-content: space-between;
+        -ms-flex-pack: justify;
+        justify-content: space-between;
+        padding-top: 27px;
+        padding-bottom: 27px;
+      }
+      .title {
+          box-sizing: border-box;
+          margin: 0;
+          min-width: 0;
+          font-family: inherit;
+          font-weight: heading;
+          line-height: 0.9;
+          font-size: 48px;
+          font-weight: 800;
+          -webkit-letter-spacing: -0.05em;
+          -moz-letter-spacing: -0.05em;
+          -ms-letter-spacing: -0.05em;
+          letter-spacing: -0.05em;
+          line-height: 1;
+          text-align: left;
+          text-align: center;
+          max-width: 1112px;
+          text-shadow: 0 0 20px #00000082;
+      }
+      h3 {
+        max-width: 750px;
+      }
+      .container {
+          box-sizing: border-box;
+          margin: 0;
+          min-width: 0;
+          width: 100%;
+          max-width: container;
+          margin-left: auto;
+          margin-right: auto;
+          margin-left: auto;
+          margin-right: auto;
+          padding-left: 16px;
+          padding-right: 16px;
+          z-index: 10;
+          position: relative;
+      }
+      .flexer {
+          box-sizing: border-box;
+          margin: 0;
+          min-width: 0;
+          display: -webkit-box;
+          display: -webkit-flex;
+          display: -ms-flexbox;
+          display: flex;
+          -webkit-flex-direction: column;
+          -ms-flex-direction: column;
+          flex-direction: column;
+          -webkit-box-pack: center;
+          -webkit-justify-content: center;
+          -ms-flex-pack: center;
+          justify-content: center;
+          min-height: calc(100vh - 60px - 90px);
+          padding-bottom: calc(32px + 90px - 60px);
+          padding-top: 32px;
+      }
+      .flexer p {
+        box-sizing: border-box;
+        margin: 0;
+        min-width: 0;
+        font-size: 16px;
+        font-weight: 400;
+        line-height: 1.6;
+        margin-bottom: 32px;
+        margin-top: 16px;
+        max-width: 587px;
+        text-align: center;
+          text-shadow: 0 0 10px #00000082;
+      }
+      footer {
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-align-items: center;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+        -webkit-box-pack: center;
+        -webkit-justify-content: center;
+        -ms-flex-pack: center;
+        justify-content: center;
+        padding-top: 16px;
+        padding-bottom: 16px;
+      }
+      .inner-footer {
+        box-sizing: border-box;
+        margin: 0;
+        min-width: 0;
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 1.6;
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-align-items: center;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+      }
+      .inner-footer svg,.inner-footer img {
+          display: inline-block;
+          width: 24px;
+          margin-right: 8px;
+          vertical-align: bottom;
+      }
+      .md-up {
+        display:none !important;
+      }
+      .md-down {
+        display:inline-block !important;
+      }
+      .btns {
+        box-sizing: border-box;
+        margin: 0px;
+        text-align: center;
+      }
+
+      canvas {
+        margin-top: 60px;
+        outline:none;
+      }
+      #canvas-wrap {
+        position:fixed;
+        right:0;
+        top: 0;
+        bottom:0;
+        left:0;
+        text-align: right;
+        overflow: hidden;
+      }
+
+      .flexer a {
+        text-decoration: underline;
+      }
+      .flexer a:hover {
+        color:#0fe9c4;
+      }
+
+      div#faq p ,div#about p {
+          max-width: 750px;
+      }
+      @media screen and (max-width: 689px){
+
+        h3 {
+          text-align: center;
+        }
+        .btns p {
+            background: #000000d4;
+            border: 1px solid #0fe9c4;
+            border-radius: 7px;
+            padding: 10px;
+        }
+        .key li {
+            background: #000000d4;
+            border: 1px solid #0fe9c4;
+            margin-bottom: 5px;
+            border-radius: 7px;
+            padding: 5px;
+        }
+        .actioned {
+          padding-top: 0;
+          min-height: calc(100vh - 50px);
+          padding-bottom: calc(50px + 90px);
+        }
+        div#faq,div#about {
+            background: #000000d6;
+            padding: 1rem;
+            border-radius: 10px;
+        }
+      }
+      @media screen and (min-width: 690px){
+        canvas {
+          margin-top: 0;
+        }
+        .container {
+            padding-left: 32px;
+            padding-right: 32px;
+        }
+        .title {
+          font-size: 64px;
+          line-height: 0.9;
+          text-align: left;
+        }
+        .flexer p {
+          margin-bottom: 64px;
+          margin-top: 32px;
+          text-align: left;
+          font-size: 18px;
+        }
+        header .content {
+          padding-left: 32px;
+          padding-right: 32px;
+        }
+        footer {
+          -webkit-box-pack: justify;
+          -webkit-justify-content: space-between;
+          -ms-flex-pack: justify;
+          justify-content: space-between;
+        }
+        .inner-footer {
+          font-size: 16px;
+        }
+        .md-up {
+          display:inline !important;
+        }
+        .md-down {
+          display:none !important;
+        }
+        .btns {
+          text-align: left;
+        }
+      }
+      @media screen and (min-width: 832px) {
+        .container {
+          padding-left: 64px;
+          padding-right: 64px;
+        }
+        header .content {
+          padding-left: 64px;
+          padding-right: 64px;
+        }
+      }
+      @media screen and (min-width: 1280px){
+        .title {
+          font-size: 88px;
+        }
+      }
+      @media screen and (min-width: 1280px) and (max-height: 750px) {
+        .title {
+          font-size:64px;
+        }
+      }
+      .mainbrand svg {
+        height: 36px;
+        vertical-align: middle;
+        margin-right: 0.5rem;
+      }
+      .mainbrand span {
+        font-weight: 700;
+        font-size: 1rem;
+        vertical-align: middle;
+      }
+      .menu-item {
+        box-sizing: border-box;
+        margin: 0;
+        min-width: 0;
+        color: inherit;
+        -webkit-text-decoration: none;
+        text-decoration: none;
+        font-weight: bold;
+        display: inline-block;
+        color: #fff;
+        text-transform: uppercase;
+        font-size: 14px;
+        vertical-align: middle;
+      }
+      .menu-item:hover {
+        color:#0fe9c4;
+      }
+      .menu-item svg {
+        display: inline-block;
+        width: 24px;
+      }
+      .mr-1 {
+        margin-right: 32px;
+      }
+      .ml-1 {
+        margin-left: 32px;
+      }
+      .btn {
+        box-sizing: border-box;
+        margin: 0;
+        min-width: 0;
+        appearance: none;
+        text-align: center;
+        line-height: 3rem;
+        text-decoration: none;
+        border: 0;
+        border-radius: 0.25rem;
+        background-color: #0fe9c4;
+        color: hsl(170 88% 5% / 1);
+        padding-left: 32px;
+        padding-right: 32px;
+        height: 3rem;
+        font-weight: 600;
+        transition: background .15s;
+        font-size: 18px;
+        cursor: pointer;
+        position: relative;
+    }
+    .btn:focus {
+      outline: none;
+      /*box-shadow: 0 0 0 4px rgb(15 233 196 / 0.5);
+      background-color: #49ffe1;*/
+    }
+    .btn:hover {
+      background-color: #49ffe1;
+    }
+    .btn .text {
+      display:block;
+    }
+    .loading .text,
+    .btn .spinner {
+      display:none;
+    }
+    .loading .spinner {
+      display:block;
+    }
+    .spinner {
+      display: block;
+      width: 34px;
+      height: 34px;
+      position: absolute;
+      left: calc(50% - 17px);
+      top:7px;
+      background: transparent;
+      box-sizing: border-box;
+      border-top: 4px solid hsl(170 88% 5% / 1);
+      border-left: 4px solid transparent;
+      border-right: 4px solid transparent;
+      border-bottom: 4px solid transparent;
+      border-radius: 100%;
+      animation: spin 0.6s cubic-bezier(0, 0, 0, 0) infinite;
+    }
+    @keyframes spin {
+      100% {transform: rotate(360deg)}
+    } 
+    .start {
+      width: 190px;
+      transition: all 0.15s ease-out;
+      height: 48px;
+      padding:0;
+      white-space: nowrap;
+      margin: 0 auto;
+      display:block;
+    }
+    .title br {
+        display: none;
+    }
+    @media screen and (min-width: 690px){
+      .title br {
+        display: inline;
+      }
+      .start {
+        display: inline;
+      }
+    }
+    .start.loading {
+      width: 48px;
+      border-radius: 24px;
+    }
+    .start .text {
+      text-align: center;
+      width: 100%;
+    }
+    .checkmark {
+      display: none;
+      width: 34px;
+      height: 34px;
+      position: absolute;
+      left: calc(50% - 17px);
+      top:7px;
+    }
+    .done .checkmark {
+      display: block;
+    }
+    .done .spinner {
+      display:none;
+    }
+    .key {
+      line-height: 30px;
+      list-style: none;
+      padding:0;
+      margin-top: 32px;
+    }
+    .key span {
+      /*background:rgb(15 233 196 / 16%);
+      border-radius: 5px;
+      padding: 4px 8px;*/
+    }
+    .key strong {
+      display:block;
+    }
+    .ok {
+      opacity: 0;
+      transition: all 0.4s;
+      min-height: 0;
+      height: 0;
+    overflow: hidden;
+    }
+    .ok.show {
+      opacity: 1;
+      display: inline;
+    }
+    div.ok.show {
+      min-height: 370px;
+      display: block;
+    overflow: visible;
+    }
+    .btns span.ok,
+    #first h3 {
+      line-height: 48px;
+      font-weight: bold;
+      font-size: 24px;
+    text-shadow: 0 0 10px #00000082;
+    }
+    .btns span.ok {
+      vertical-align: bottom;
+      margin-left: 10px;
+    }
+    @media screen and (min-width: 690px){
+      .btns span.ok,
+      h3 {
+        font-size: 44px;
+      }
+      .key strong {
+        display:inline;
+      }
+    }
+    .create {
+      transition: all 0.5s;
+      min-height: 266px;
+    }
+    .created {
+      opacity: 0 !important;
+      min-height: 0;
+      height: 0;
+    }
+    .btns {
+      min-height: 0;
+      transition: all 0.5s !important;
+    }
+    .btns.upitgoes {
+      min-height: 305px;
+    }
+
+    .tab-pane {
+      display: none;
+    }
+    .tab-pane.active {
+      display: block;
+    }
+    #faq p {
+      height: 0;
+      opacity: 0;
+      margin: -0.75rem 0 2.5rem;
+      padding: 0;
+      transition: all 0.4s;
+    }
+
+    #faq h3 {
+      margin: 1.25rem 0;
+      cursor: pointer;
+      z-index: 1000;
+      position: relative;
+      background: rgba(0, 0, 0, 0);
+      transition: color 0.5s;
+    }
+    #faq h3:hover {
+      color: #0fe9c4;
+      transition-duration: 0.15s;
+    }
+
+    #faq p.active {
+      opacity: 1;
+    }
+
+    #faq h2.title {
+        margin-bottom: 3rem;
+    }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.115.0/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.115.0/examples/js/controls/OrbitControls.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/three@0.115.0/examples/js/postprocessing/EffectComposer.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.115.0/examples/js/postprocessing/RenderPass.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.115.0/examples/js/postprocessing/ShaderPass.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.115.0/examples/js/shaders/CopyShader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.115.0/examples/js/shaders/LuminosityHighPassShader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.115.0/examples/js/postprocessing/UnrealBloomPass.js"></script>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-M447FTNYBC"></script>
+    <script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-M447FTNYBC');
+</script>
+  </head>
+  <body>
+    <div id="canvas-wrap">
+    <script type="x-shader/x-vertex" id="vertex-shader">
+      uniform float time;
+      attribute vec3 customColor;
+      varying vec3 vColor;
+      //	Simplex 4D Noise
+      //	by Ian McEwan, Ashima Arts
+      //
+      vec4 permute(vec4 x){return mod(((x*34.0)+1.0)*x, 289.0);}
+      float permute(float x){return floor(mod(((x*34.0)+1.0)*x, 289.0));}
+      vec4 taylorInvSqrt(vec4 r){return 1.79284291400159 - 0.85373472095314 * r;}
+      float taylorInvSqrt(float r){return 1.79284291400159 - 0.85373472095314 * r;}
+    
+      vec4 grad4(float j, vec4 ip){
+        const vec4 ones = vec4(1.0, 1.0, 1.0, -1.0);
+        vec4 p,s;
+    
+        p.xyz = floor( fract (vec3(j) * ip.xyz) * 7.0) * ip.z - 1.0;
+        p.w = 1.5 - dot(abs(p.xyz), ones.xyz);
+        s = vec4(lessThan(p, vec4(0.0)));
+        p.xyz = p.xyz + (s.xyz*2.0 - 1.0) * s.www;
+    
+        return p;
+      }
+    
+      float snoise(vec4 v){
+        const vec2  C = vec2( 0.138196601125010504,  // (5 - sqrt(5))/20  G4
+                              0.309016994374947451); // (sqrt(5) - 1)/4   F4
+      // First corner
+        vec4 i  = floor(v + dot(v, C.yyyy) );
+        vec4 x0 = v -   i + dot(i, C.xxxx);
+    
+      // Other corners
+    
+      // Rank sorting originally contributed by Bill Licea-Kane, AMD (formerly ATI)
+        vec4 i0;
+    
+        vec3 isX = step( x0.yzw, x0.xxx );
+        vec3 isYZ = step( x0.zww, x0.yyz );
+      //  i0.x = dot( isX, vec3( 1.0 ) );
+        i0.x = isX.x + isX.y + isX.z;
+        i0.yzw = 1.0 - isX;
+    
+      //  i0.y += dot( isYZ.xy, vec2( 1.0 ) );
+        i0.y += isYZ.x + isYZ.y;
+        i0.zw += 1.0 - isYZ.xy;
+    
+        i0.z += isYZ.z;
+        i0.w += 1.0 - isYZ.z;
+    
+        // i0 now contains the unique values 0,1,2,3 in each channel
+        vec4 i3 = clamp( i0, 0.0, 1.0 );
+        vec4 i2 = clamp( i0-1.0, 0.0, 1.0 );
+        vec4 i1 = clamp( i0-2.0, 0.0, 1.0 );
+    
+        //  x0 = x0 - 0.0 + 0.0 * C
+        vec4 x1 = x0 - i1 + 1.0 * C.xxxx;
+        vec4 x2 = x0 - i2 + 2.0 * C.xxxx;
+        vec4 x3 = x0 - i3 + 3.0 * C.xxxx;
+        vec4 x4 = x0 - 1.0 + 4.0 * C.xxxx;
+    
+      // Permutations
+        i = mod(i, 289.0);
+        float j0 = permute( permute( permute( permute(i.w) + i.z) + i.y) + i.x);
+        vec4 j1 = permute( permute( permute( permute (
+                    i.w + vec4(i1.w, i2.w, i3.w, 1.0 ))
+                  + i.z + vec4(i1.z, i2.z, i3.z, 1.0 ))
+                  + i.y + vec4(i1.y, i2.y, i3.y, 1.0 ))
+                  + i.x + vec4(i1.x, i2.x, i3.x, 1.0 ));
+      // Gradients
+      // ( 7*7*6 points uniformly over a cube, mapped onto a 4-octahedron.)
+      // 7*7*6 = 294, which is close to the ring size 17*17 = 289.
+    
+        vec4 ip = vec4(1.0/294.0, 1.0/49.0, 1.0/7.0, 0.0) ;
+    
+        vec4 p0 = grad4(j0,   ip);
+        vec4 p1 = grad4(j1.x, ip);
+        vec4 p2 = grad4(j1.y, ip);
+        vec4 p3 = grad4(j1.z, ip);
+        vec4 p4 = grad4(j1.w, ip);
+    
+      // Normalise gradients
+        vec4 norm = taylorInvSqrt(vec4(dot(p0,p0), dot(p1,p1), dot(p2, p2), dot(p3,p3)));
+        p0 *= norm.x;
+        p1 *= norm.y;
+        p2 *= norm.z;
+        p3 *= norm.w;
+        p4 *= taylorInvSqrt(dot(p4,p4));
+    
+      // Mix contributions from the five corners
+        vec3 m0 = max(0.6 - vec3(dot(x0,x0), dot(x1,x1), dot(x2,x2)), 0.0);
+        vec2 m1 = max(0.6 - vec2(dot(x3,x3), dot(x4,x4)            ), 0.0);
+        m0 = m0 * m0;
+        m1 = m1 * m1;
+        return 49.0 * ( dot(m0*m0, vec3( dot( p0, x0 ), dot( p1, x1 ), dot( p2, x2 )))
+                      + dot(m1*m1, vec2( dot( p3, x3 ), dot( p4, x4 ) ) ) ) ;
+    
+      }
+      void main() {
+          vColor = customColor;
+          vec3 p = position;
+          float r = snoise(vec4(p*0.015, time*0.0005));
+          p.y += p.y*r*0.1;
+          p.x += p.x*r*0.1;
+          p.z += p.z*r*0.1;
+          vec4 mvPosition = modelViewMatrix * vec4( p, 1.0 );
+          gl_PointSize = 10. * (100.0/-mvPosition.z);
+          gl_Position = projectionMatrix * mvPosition;
+      }
+    </script>
+    
+    <script type="x-shader/x-fragment" id="fragment-shader">
+      varying vec3 vColor;
+      void main() {
+          gl_FragColor = vec4(vColor, 0.1);
+      }
+    </script>
+    <script>
+      const params = {
+        exposure: 1,
+        bloomStrength: 0.4,
+        bloomThreshold: 0,
+        bloomRadius: 0
+      };
+      const { min, PI, sqrt, cos, sin, pow, floor } = Math;
+      const range = (n) =>
+        Array(n)
+          .fill(0)
+          .map((i, j) => i + j);
+      
+      const sum = (arr) => arr.reduce((acc, cur) => acc + cur, 0);
+      const slicedSum = (arr, i) => sum(arr.slice(0, i));
+      const pointsOnSphere = (n) => {
+        const pts = [];
+        const inc = PI * (3 - sqrt(5));
+        const off = 2 / n;
+        range(n).forEach((i) => {
+          const y = i * off - 1 + off / 2;
+          const r = sqrt(1 - y * y);
+          const phi = i * inc;
+          const x = cos(phi) * r;
+          const z = sin(phi) * r;
+          pts.push([x, y, z]);
+        });
+        return pts;
+      };
+      
+      const numMap = (value, sMin, sMax, dMin, dMax) => {
+        return dMin + ((value - sMin) / (sMax - sMin)) * (dMax - dMin);
+      };
+      
+      const colArray = [0x0FE9C4, 0x3BC3F3, 0xad78ed, 0xf3a5f3];
+      colArray.reverse();
+      let camera, controls, scene, renderer, cloud, composer, bloomPass, meshPlanet;
+      const uniforms = {
+        time: { type: "f", value: 1.0 }
+      };
+      
+      let { innerWidth, innerHeight } = window;
+      let canvasSize = min(innerWidth, innerHeight);
+
+      let zoom = 500;
+            
+      init();
+      animate();
+      
+      function init() {
+        scene = new THREE.Scene();
+        if(window.devicePixelRatio > 1) {
+            devicePixelRatio = 1;
+        } else {
+          devicePixelRatio = window.devicePixelRatio;
+        }
+        renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setPixelRatio(devicePixelRatio);
+        document.getElementById("canvas-wrap").appendChild(renderer.domElement);
+
+        el=document.getElementById("canvas-wrap");
+        if(innerWidth > 414){
+          var minimum = 1200;
+        } else {
+          var minimum = 800;
+        }
+        if(canvasSize < minimum){
+          zoom = 625;
+
+          canvasSize = minimum;
+          el.querySelector('canvas').style.marginTop = "-"+(canvasSize-innerHeight) / 2+"px";
+          el.querySelector('canvas').style.marginLeft = "-"+(canvasSize-innerWidth) / 2+"px";
+        }
+        if(innerWidth > 1359){
+          el.querySelector('canvas').style.marginRight = (innerWidth-canvasSize) / 4+"px";
+        }
+        renderer.setSize(canvasSize, canvasSize);
+
+        camera = new THREE.PerspectiveCamera(60, 1, 1, 800);
+
+        camera.position.set(128, 90, zoom);
+      
+        controls = new THREE.OrbitControls(camera, renderer.domElement);
+            
+        const renderScene = new THREE.RenderPass(scene, camera);
+      
+        bloomPass = new THREE.UnrealBloomPass(
+          new THREE.Vector2(canvasSize, canvasSize),
+          1.5,
+          0.4,
+          0.85
+        );
+        bloomPass.threshold = params.bloomThreshold;
+        bloomPass.strength = params.bloomStrength;
+        bloomPass.radius = params.bloomRadius;
+        composer = new THREE.EffectComposer(renderer);
+        composer.addPass(renderScene);
+        composer.addPass(bloomPass);
+        createObjects();
+        window.addEventListener("resize", onWindowResize, false);
+      }
+      
+      function onWindowResize() {
+        el=document.getElementById("canvas-wrap");
+
+        canvasSize = min(innerWidth, innerHeight);
+        if(innerWidth > 414){
+          var minimum = 1200;
+        } else {
+          var minimum = 800;
+        }
+        if(canvasSize < minimum){
+          canvasSize = minimum;
+          el.querySelector('canvas').style.marginTop = "-"+(canvasSize-innerHeight) / 2+"px";
+          el.querySelector('canvas').style.marginLeft = "-"+(canvasSize-innerWidth) / 2+"px";
+        }
+
+        el.querySelector('canvas').style.width = canvasSize+"px";
+        el.querySelector('canvas').style.height = canvasSize+"px";
+
+        if(innerWidth > 1359){
+          el.querySelector('canvas').style.marginRight = (innerWidth-canvasSize) / 4+"px";
+        }
+
+        camera.aspect = 1;
+        camera.updateProjectionMatrix();
+        innerWidth = window.innerWidth;
+        innerHeight = window.innerHeight;
+        composer.setSize(canvasSize, canvasSize);
+      }
+      
+      function animate(time) {
+        uniforms.time.value = time;
+        requestAnimationFrame(animate);
+        render();
+      }
+      
+      function render() {
+        composer.render();
+      }
+      
+      function createObjects() {
+        const layers = range(6).map((i) => canvasSize * pow(2, i + 1));
+        layers.reverse();
+        const amount = sum(layers);
+        const positions = new Float32Array(amount * 3);
+        const colors = new Float32Array(amount * 3);
+        const vertex = new THREE.Vector3();
+        layers.forEach((layer, layerIndex) => {
+          const points = pointsOnSphere(layer);
+          points.forEach(([x, y, z], pointIndex) => {
+            const index = slicedSum(layers, layerIndex) + pointIndex;
+            const color = new THREE.Color(
+              colArray[floor(numMap(pointIndex, 0, layer, 0, colArray.length))]
+            );
+            const radius = 140 + numMap(layerIndex, 0, layers.length, 0, 120);
+            vertex.x = radius * x;
+            vertex.y = radius * y;
+            vertex.z = radius * z;
+            vertex.toArray(positions, index * 3);
+            color.toArray(colors, index * 3);
+          });
+        });
+      
+        const geometry = new THREE.BufferGeometry();
+        geometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+        geometry.setAttribute("customColor", new THREE.BufferAttribute(colors, 3));
+      
+        const material = new THREE.ShaderMaterial({
+          uniforms,
+          vertexShader: document.querySelector("#vertex-shader").textContent,
+          fragmentShader: document.querySelector("#fragment-shader").textContent,
+          blending: THREE.AdditiveBlending,
+          depthTest: false,
+          transparent: true
+        });
+        cloud = new THREE.Points(geometry, material);
+        scene.add(cloud);
+      }
+    
+      </script>
+
+    </div>
+    <div class="wrap">
+      <header id="main-nav">
+        <div class="content">
+          <a href="#first" data="#first" class="mainbrand tabber active">
+            <svg data="#first" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 629.2 1256.3" style="enable-background:new 0 0 629.2 1256.3;" xml:space="preserve"><path data="#first" fill="#0FE9C4" d="M9.1,840.3l203.7,203.8l203.7-203.8L212.8,636.5L9.1,840.3z M212.8,619.8L416.5,416L212.8,212.1L9.1,415.9 L212.8,619.8z M425.5,423.9L221.8,627.7l203.7,203.8l203.7-203.8L425.5,423.9z M203.7,628.1L0,424.3l0,0v407.5l0,0L203.7,628.1z M203.7,203.8L0,0l0,0v407.5l0,0L203.7,203.8z M0,848.7v407.5l0,0l203.7-203.8L0,848.7L0,848.7z"/></svg>
+             <span data="#first" class="md-up">Media Server Express</span></a>
+          <div class="menu">
+            <a data="#about" href="#about" class="tabber menu-item mr-1">About</a>
+            <a data="#faq" href="#faq" class="tabber menu-item">FAQ</a>
+            <a href="https://github.com/mediafoundation/mediaserver" target="_blank" rel="noopener" class="ml-1 menu-item md-down"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="css-885coq"><mask id="github-logo-mask0-nav" mask-type="alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24"><path fill-rule="evenodd" clip-rule="evenodd" d="M11.9989 0C5.37328 0 0 5.50851 0 12.3041C0 17.7401 3.43804 22.3513 8.20651 23.9782C8.8069 24.0915 9.02569 23.7116 9.02569 23.3853C9.02569 23.093 9.01538 22.3195 9.00948 21.2931C5.67163 22.0363 4.96737 19.6435 4.96737 19.6435C4.4215 18.222 3.63473 17.8435 3.63473 17.8435C2.5452 17.0807 3.71724 17.0958 3.71724 17.0958C4.9217 17.1826 5.55524 18.3639 5.55524 18.3639C6.62562 20.2439 8.36416 19.7009 9.04779 19.3859C9.15682 18.5913 9.46696 18.049 9.80951 17.7416C7.14497 17.4311 4.34341 16.3752 4.34341 11.6605C4.34341 10.3176 4.8112 9.21861 5.57881 8.35906C5.45505 8.04787 5.04325 6.79632 5.69668 5.1029C5.69668 5.1029 6.70371 4.77207 8.99622 6.36428C9.95316 6.09085 10.9801 5.9549 12.0004 5.94961C13.0199 5.9549 14.0461 6.09085 15.0045 6.36428C17.2956 4.77207 18.3011 5.1029 18.3011 5.1029C18.956 6.79632 18.5442 8.04787 18.4212 8.35906C19.1903 9.21861 19.6544 10.3176 19.6544 11.6605C19.6544 16.3873 16.8484 17.4274 14.1758 17.7318C14.606 18.1117 14.9898 18.8625 14.9898 20.0098C14.9898 21.6549 14.975 22.9819 14.975 23.3853C14.975 23.7146 15.1916 24.0975 15.8001 23.9774C20.5649 22.3467 24 17.7385 24 12.3041C24 5.50851 18.6267 0 11.9989 0" fill="white"></path></mask><g mask="url(#github-logo-mask0-nav)"><path d="M24 0H0V24H24V0Z" fill="white"></path></g></svg></a>
+          </div>
+        </div>
+      </header>
+      <div class="container">
+        <main>
+          <div class="flexer">
+            <div id="first" class="tab-pane active">
+              <div class="create">
+                <h2 class="title" data-aos="fade-up">Decentralized live<br> streaming for everyone.</h2>
+                <p data-aos="fade-up" data-aos-delay="100">Create your own channel and share it with the world. Unlimited concurrent users. Free. No sign-up required. Censorship-resistant.</p>
+              </div>
+              <div class="btns" data-aos="fade-up" data-aos-delay="200"><button class="btn start"><span class="text">Start your stream</span><div class="spinner"></div>
+                <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" height="34px" viewBox="0 0 24 24" width="34px"><path d="M0 0h24v24H0z" fill="none"/><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></button> <span class="ok action">Your stream is ready!</span>
+                <div class="ok action2">
+                  <p>Your channel was successfully created. Now you can publish the stream using a software like <a href="https://obsproject.com/" target="_blank" rel="noopener nofollow">OBS</a>, <a href="https://ffmpeg.org/FFmpeg" target="_blank" rel="noopener nofollow">FFmpeg</a> or any rtmp encoder. More info on the <a href="#faq" target="_blank" class="tabber" data="#faq">FAQ page.</a></p>
+                  <button class="btn start loading done" disabled style="background: #3bc3f3;"><svg class="checkmark" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 1000 1000" style="enable-background:new 0 0 1000 1000;" xml:space="preserve"><path d="M565,271.3c-39.3,0-71.2-31.9-71.2-71.2s31.9-71.2,71.2-71.2c39.3,0,71.2,31.9,71.2,71.2S604.3,271.3,565,271.3z M385.5,396.4c0-5.8,0-11.7,0-17.4c56.5-22.5,143.6-14.2,201.9-34.8c2.4,0,4.6,0,6.9,0c-28.1,142.6-87.5,272.2-101,417.8 c3.2,2.5,2.8,1.9,6.9,3.4c43.8,14.7,69-87.1,97.5-80.1c28.6,7.1-17.9,57.7-24.4,66.2c-25.5,33.4-74.4,90.2-132.3,90.5 c-40.9,0.2-83.2-25.5-76.6-93.9c6.7-68.5,45.1-163.9,66.2-240.3C447.6,446.2,469.5,394.7,385.5,396.4z"></path></svg></button> <span class="ok show">Channel information</span>
+                  <ul class="key">
+                    <li><span><strong>Ingest Server:</strong> rtmp://ingest.mediaserver.express/live/</span></li>
+                    <li><span><strong>Ingest Path:</strong> <%= key %></span></li>
+                    <li><span><strong>Play URL:</strong> <a href="https://mediaserver.express/v/<%= name %>" target="_blank">https://mediaserver.express/v/<%= name %></a></span></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div id="faq" class="tab-pane">
+              <h2 class="title">FAQ</h2>
+              <h3 class="acordioner" data="#how">How does MSE work?</h3>
+              <p id="how" class="acordion-pane">When you broadcast media content using mediaserver.express, your data is sent to our Media Server ingest software. This software transcodes the ingested data, which is the process of taking a raw live video/audio and reformatting it to make it available for any device. Once the stream is reformatted, it gets pulled from <a href="https://medianet.work" target="_blank">Media Network</a>’s infrastructure for last-mile delivery to the end users, which will be also sharing bandwidth with each other based on location and latency. Detailed information on how it works can be found <a href="https://docs.medianet.work/testnet-basic" target="_blank">here</a>.</p>
+              <h3 class="acordioner" data="#limits">Is there any limit in concurrent users or bandwidth?</h3>
+              <p id="limits" class="acordion-pane">No. You can push it as far as you can. If you think you have enough traffic to break our platform, please contact us for business opportunities. 😜</p>
+
+              <h3 class="acordioner" data="#fees">Who pays for the infrastructure?</h3>
+              <p id="fees" class="acordion-pane">Streaming and bandwidth fees are subsidized by Media Foundation.</p>
+
+              <h3 class="acordioner" data="#earns">Who earns the subsidized fees?</h3>
+              <p id="earns" class="acordion-pane"><a href="https://medianet.work" target="_blank">Media Network</a> is made up of many different computers run by many different people and organizations. Different actors within these networks earn a portion of the streaming and bandwidth fees sent by mediaserver.express on your behalf.</p>
+
+              <h3 class="acordioner" data="#own">Is it possible to run my own Media Server?</h3>
+              <p id="own" class="acordion-pane">You can run a self-hosted instance of this software where your own rules apply. Source code and instructions available <a href="https://docs.medianet.work/ms-setup" target="_blank">here</a>.</p>
+            </div>
+            <div id="about" class="tab-pane">
+              <h2 class="title">What is Media Server Express?</h2>
+               <p>Media Server Express is an open source, decentralized and censorship-resistant live streaming hosting solution built using <a href="https://docs.medianet.work/mediaserver" target="_blank">Media Server</a> and powered by <a href="https://medianet.work" target="_blank">Media Network</a>, the first fully decentralized live streaming network. Our service is free and there’s no signup or KYC required.</p>
+               <p>Made with ❤️ and lots of ☕️ by <a href="https://media.foundation" target="_blank">Media Foundation</a></p>
+
+            </div>
+          </div>
+        </main>
+        <footer>
+          <div class="inner-footer">
+            Powered by &nbsp; <a href="https://medianet.work" target="_blank" rel="noopener"><img src="/static/images/medianetwork.svg" alt="Media Network Logo"><strong>Media Network</strong></a>
+          </div>
+          <div class="inner-footer">
+            <a href="https://github.com/mediafoundation/mediaserver" target="_blank" rel="noopener" class="md-up"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="css-5ronwr"><mask id="github-logo-mask0-undefined" mask-type="alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24"><path fill-rule="evenodd" clip-rule="evenodd" d="M11.9989 0C5.37328 0 0 5.50851 0 12.3041C0 17.7401 3.43804 22.3513 8.20651 23.9782C8.8069 24.0915 9.02569 23.7116 9.02569 23.3853C9.02569 23.093 9.01538 22.3195 9.00948 21.2931C5.67163 22.0363 4.96737 19.6435 4.96737 19.6435C4.4215 18.222 3.63473 17.8435 3.63473 17.8435C2.5452 17.0807 3.71724 17.0958 3.71724 17.0958C4.9217 17.1826 5.55524 18.3639 5.55524 18.3639C6.62562 20.2439 8.36416 19.7009 9.04779 19.3859C9.15682 18.5913 9.46696 18.049 9.80951 17.7416C7.14497 17.4311 4.34341 16.3752 4.34341 11.6605C4.34341 10.3176 4.8112 9.21861 5.57881 8.35906C5.45505 8.04787 5.04325 6.79632 5.69668 5.1029C5.69668 5.1029 6.70371 4.77207 8.99622 6.36428C9.95316 6.09085 10.9801 5.9549 12.0004 5.94961C13.0199 5.9549 14.0461 6.09085 15.0045 6.36428C17.2956 4.77207 18.3011 5.1029 18.3011 5.1029C18.956 6.79632 18.5442 8.04787 18.4212 8.35906C19.1903 9.21861 19.6544 10.3176 19.6544 11.6605C19.6544 16.3873 16.8484 17.4274 14.1758 17.7318C14.606 18.1117 14.9898 18.8625 14.9898 20.0098C14.9898 21.6549 14.975 22.9819 14.975 23.3853C14.975 23.7146 15.1916 24.0975 15.8001 23.9774C20.5649 22.3467 24 17.7385 24 12.3041C24 5.50851 18.6267 0 11.9989 0" fill="white"></path></mask><g mask="url(#github-logo-mask0-undefined)"><path d="M24 0H0V24H24V0Z" fill="white"></path></g></svg>github.com/mediafoundation/mediaserver</a></div></footer>
+      </div>
+    </div>
+    <script>
+      function loadstart() { 
+        
+      }
+
+      
+      document.addEventListener("DOMContentLoaded", function(){
+        var el = document.querySelector('.start');
+        el.addEventListener('click', function() { 
+          window.onbeforeunload = function(e) {
+              return "After closing this window you won't be able to retrieve your stream key anymore. Are you sure you want to leave?";
+          };
+          el.classList.add('loading');
+          el.disabled = true;
+          setTimeout(function(){
+            el.classList.add('done');
+            var action = document.querySelector('.action');
+            action.classList.add('show');
+            var cr = document.querySelector('.create');
+            cr.classList.add('created');
+          },1000);
+          setTimeout(function(){
+            var cr = document.querySelector('.flexer');
+            cr.classList.add('actioned');
+            var cr = document.querySelector('.btns');
+            cr.classList.add('upitgoes');
+            var action2 = document.querySelector('.action2');
+            action2.classList.add('show');
+          },1600);
+        });
+
+        var myTabs = document.querySelectorAll(".tabber");
+        function myTabClicks(tabClickEvent) {
+          for (var i = 0; i < myTabs.length; i++) {
+            myTabs[i].classList.remove("active");
+          }
+          var clickedTab = tabClickEvent.currentTarget; 
+          clickedTab.classList.add("active");
+          tabClickEvent.preventDefault();
+          var myContentPanes = document.querySelectorAll(".tab-pane");
+          for (i = 0; i < myContentPanes.length; i++) {
+            myContentPanes[i].classList.remove("active");
+          }
+          var anchorReference = tabClickEvent.target;
+          var activePaneId = anchorReference.getAttribute("data");
+          var activePane = document.querySelector(activePaneId);
+          activePane.classList.add("active");
+        }
+        for (i = 0; i < myTabs.length; i++) {
+          myTabs[i].addEventListener("click", myTabClicks)
+        }
+
+        var myAccordion = document.querySelectorAll(".acordioner");
+        var myAccordionPanes = document.querySelectorAll(".acordion-pane");
+
+        function myAccordionClicks(accordionClickEvent) {
+          for (var i = 0; i < myAccordion.length; i++) {
+            myAccordion[i].classList.remove("active");
+          }
+          for (i = 0; i < myAccordionPanes.length; i++) {
+            myAccordionPanes[i].classList.remove("active");
+            myAccordionPanes[i].style.height = "0";
+          }
+          var clickedAccordion = accordionClickEvent.currentTarget; 
+          clickedAccordion.classList.add("active");
+          accordionClickEvent.preventDefault();
+          var anchorReference = accordionClickEvent.target;
+          var activePaneId = anchorReference.getAttribute("data");
+          var activePane = document.querySelector(activePaneId);
+          activePane.classList.add("active");
+          activePane.style.height = activePane.scrollHeight+"px";
+        }
+        for (i = 0; i < myAccordion.length; i++) {
+          myAccordion[i].addEventListener("click", myAccordionClicks)
+        }
+
+      }, false);
+
+      var lastScrollTop = 0;
+
+      window.addEventListener("scroll", function(){
+        var st = window.pageYOffset || document.documentElement.scrollTop;
+        var nav = document.getElementById("main-nav");
+        if (st > 0){
+          nav.classList.add('scrolling');
+        } else if(st == 0) {
+          nav.classList.remove('scrolling');
+        }
+        lastScrollTop = st <= 0 ? 0 : st;
+      }, false);
+
+      AOS.init({
+        disable: 'mobile',
+        once: true
+      });
+    </script>
+  </body>
+  </html>

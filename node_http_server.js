@@ -6,6 +6,7 @@ const WebSocket = require('ws');
 const Express = require('express');
 const bodyParser = require('body-parser');
 const basicAuth = require('basic-auth-connect');
+const CryptoJS = require("crypto-js");
 const NodeFlvSession = require('./node_flv_session');
 const HTTP_PORT = 80;
 const HTTPS_PORT = 443;
@@ -27,6 +28,9 @@ class NodeHttpServer {
     app.use(bodyParser.json());
 
     app.use(bodyParser.urlencoded({ extended: true }));
+    app.engine('html', require('ejs').renderFile);
+    app.set('view engine', 'html');
+    app.set('views', __dirname);
 
     app.all('*', (req, res, next) => {
       res.header("Access-Control-Allow-Origin", this.config.http.allow_origin);
@@ -48,9 +52,25 @@ class NodeHttpServer {
       });
     }
 
+    app.get('/', (req, res) => {
+      var name = '';
+      var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+      var charactersLength = characters.length;
+      for ( var i = 0; i < 8; i++ ) {
+        name += characters.charAt(Math.floor(Math.random() * charactersLength));
+      }
+      var md5 = CryptoJS.SHA256(this.config.passphrase+"/live/"+name).toString();
+      var key = name+"?pwd="+md5.substring(0,6);
+      res.render("views/index.html", {name:name,key:key});
+    });
+    
+    app.get('/v/:id', (req, res) => {
+      res.render("views/channel.html", {name:req.params.id});
+    });
+    
     if (this.config.http.api !== false) {
       if (this.config.auth && this.config.auth.api) {
-        app.use(['/api/*', '/static/*', '/admin/*'], basicAuth(this.config.auth.api_user, this.config.auth.api_pass));
+        app.use(['/api/*', '/admin/*'], basicAuth(this.config.auth.api_user, this.config.auth.api_pass));
       }
       app.use('/api/streams', streamsRoute(context));
       app.use('/api/server', serverRoute(context));
