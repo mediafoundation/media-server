@@ -5,12 +5,12 @@
 
 ### Install system tools and node.js
 ```bash
-apt install -y git htop curl xz-utils tmux; \
+apt install -y git htop curl xz-utils; \
 curl -sL https://deb.nodesource.com/setup_15.x | bash -; \
 apt install -y nodejs
 ```
 
-### Install ffmpeg and pm2
+### Install ffmpeg
 ```bash
 cd /tmp; \
 rm -rf /tmp/ffmpeg-git*; \
