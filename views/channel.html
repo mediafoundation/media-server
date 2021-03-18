@@ -1,6 +1,6 @@
 <style>body{margin:0}#video{width:100vw;height:100vh;}</style>
 <div id="video"></div>
-<script src="https://demo.medianet.work/medianet.js"></script>
+<script src="https://media.network/demo/peerpool.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/clappr@latest"></script>
 <script>
   if (p2pml.hlsjs.Engine.isSupported()) {
@@ -12,7 +12,7 @@
   var engine = new p2pml.hlsjs.Engine();
   var player = new Clappr.Player({
     parentId: "#video",
-    source: "https://your-wallet-address.medianet.work/live/<%= name %>/index.m3u8",
+    source: "https://YourHostId/live/<%= name %>/index.m3u8",
     width:"100%",
     height:"100%",
     playback: {
