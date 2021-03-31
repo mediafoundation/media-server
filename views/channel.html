@@ -1015,8 +1015,8 @@
                 strokeWidth: 2,
                 series: [
                     {name: "Upload", color: "rgba(15, 255, 135, 1)", data: [], renderer: 'line'},
-                    {name: "P2P", color: "rgba(59, 195, 243, 1)", data: [], renderer: 'line'},
-                    {name: "HTTP", color: "rgba(217, 51, 137, 1)", data: [], renderer: 'line'},
+                    {name: "P2P (PeerPool)", color: "rgba(59, 195, 243, 1)", data: [], renderer: 'line'},
+                    {name: "Media Network", color: "rgba(217, 51, 137, 1)", data: [], renderer: 'line'},
                     {name: "Real Time", color: "transparent", data: [], renderer: 'line'}
                 ]
             };
@@ -1143,12 +1143,12 @@
                     + Number(totalMb).toFixed(1) + " MiB";
 
                 this.legendTotals.lines[2].element.childNodes[1].textContent
-                    = "HTTP - "
+                    = "Media Network - "
                     + Number(httpMb).toFixed(1) + " MiB - "
                     + Number((httpMb * 100) / totalMb).toFixed(0) + "%";
 
                 this.legendTotals.lines[3].element.childNodes[1].textContent
-                    = "P2P - "
+                    = "P2P (PeerPool) - "
                     + Number(p2pMb).toFixed(1) + " MiB - "
                     + Number((p2pMb * 100) / totalMb).toFixed(0) + "%";
 
