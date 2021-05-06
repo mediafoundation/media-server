@@ -15,11 +15,8 @@
     <meta name="msapplication-config" content="/static/favicons/browserconfig.xml">
     <meta name="theme-color" content="#000000">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <title>Media Server Express | Decentralized live streaming.</title>
+    <title>Media Server Express | Decentralized Live Streaming Demo.</title>
     <style>
-      html {
-        overflow-y: scroll;
-      }
       body{
         background: black;
         color:#fff;
@@ -412,7 +409,7 @@
     }
     @keyframes spin {
       100% {transform: rotate(360deg)}
-    } 
+    }
     .start {
       width: 190px;
       transition: all 0.15s ease-out;
@@ -590,55 +587,55 @@
       float permute(float x){return floor(mod(((x*34.0)+1.0)*x, 289.0));}
       vec4 taylorInvSqrt(vec4 r){return 1.79284291400159 - 0.85373472095314 * r;}
       float taylorInvSqrt(float r){return 1.79284291400159 - 0.85373472095314 * r;}
-    
+
       vec4 grad4(float j, vec4 ip){
         const vec4 ones = vec4(1.0, 1.0, 1.0, -1.0);
         vec4 p,s;
-    
+
         p.xyz = floor( fract (vec3(j) * ip.xyz) * 7.0) * ip.z - 1.0;
         p.w = 1.5 - dot(abs(p.xyz), ones.xyz);
         s = vec4(lessThan(p, vec4(0.0)));
         p.xyz = p.xyz + (s.xyz*2.0 - 1.0) * s.www;
-    
+
         return p;
       }
-    
+
       float snoise(vec4 v){
         const vec2  C = vec2( 0.138196601125010504,  // (5 - sqrt(5))/20  G4
                               0.309016994374947451); // (sqrt(5) - 1)/4   F4
       // First corner
         vec4 i  = floor(v + dot(v, C.yyyy) );
         vec4 x0 = v -   i + dot(i, C.xxxx);
-    
+
       // Other corners
-    
+
       // Rank sorting originally contributed by Bill Licea-Kane, AMD (formerly ATI)
         vec4 i0;
-    
+
         vec3 isX = step( x0.yzw, x0.xxx );
         vec3 isYZ = step( x0.zww, x0.yyz );
       //  i0.x = dot( isX, vec3( 1.0 ) );
         i0.x = isX.x + isX.y + isX.z;
         i0.yzw = 1.0 - isX;
-    
+
       //  i0.y += dot( isYZ.xy, vec2( 1.0 ) );
         i0.y += isYZ.x + isYZ.y;
         i0.zw += 1.0 - isYZ.xy;
-    
+
         i0.z += isYZ.z;
         i0.w += 1.0 - isYZ.z;
-    
+
         // i0 now contains the unique values 0,1,2,3 in each channel
         vec4 i3 = clamp( i0, 0.0, 1.0 );
         vec4 i2 = clamp( i0-1.0, 0.0, 1.0 );
         vec4 i1 = clamp( i0-2.0, 0.0, 1.0 );
-    
+
         //  x0 = x0 - 0.0 + 0.0 * C
         vec4 x1 = x0 - i1 + 1.0 * C.xxxx;
         vec4 x2 = x0 - i2 + 2.0 * C.xxxx;
         vec4 x3 = x0 - i3 + 3.0 * C.xxxx;
         vec4 x4 = x0 - 1.0 + 4.0 * C.xxxx;
-    
+
       // Permutations
         i = mod(i, 289.0);
         float j0 = permute( permute( permute( permute(i.w) + i.z) + i.y) + i.x);
@@ -650,15 +647,15 @@
       // Gradients
       // ( 7*7*6 points uniformly over a cube, mapped onto a 4-octahedron.)
       // 7*7*6 = 294, which is close to the ring size 17*17 = 289.
-    
+
         vec4 ip = vec4(1.0/294.0, 1.0/49.0, 1.0/7.0, 0.0) ;
-    
+
         vec4 p0 = grad4(j0,   ip);
         vec4 p1 = grad4(j1.x, ip);
         vec4 p2 = grad4(j1.y, ip);
         vec4 p3 = grad4(j1.z, ip);
         vec4 p4 = grad4(j1.w, ip);
-    
+
       // Normalise gradients
         vec4 norm = taylorInvSqrt(vec4(dot(p0,p0), dot(p1,p1), dot(p2, p2), dot(p3,p3)));
         p0 *= norm.x;
@@ -666,7 +663,7 @@
         p2 *= norm.z;
         p3 *= norm.w;
         p4 *= taylorInvSqrt(dot(p4,p4));
-    
+
       // Mix contributions from the five corners
         vec3 m0 = max(0.6 - vec3(dot(x0,x0), dot(x1,x1), dot(x2,x2)), 0.0);
         vec2 m1 = max(0.6 - vec2(dot(x3,x3), dot(x4,x4)            ), 0.0);
@@ -674,7 +671,7 @@
         m1 = m1 * m1;
         return 49.0 * ( dot(m0*m0, vec3( dot( p0, x0 ), dot( p1, x1 ), dot( p2, x2 )))
                       + dot(m1*m1, vec2( dot( p3, x3 ), dot( p4, x4 ) ) ) ) ;
-    
+
       }
       void main() {
           vColor = customColor;
@@ -688,7 +685,7 @@
           gl_Position = projectionMatrix * mvPosition;
       }
     </script>
-    
+
     <script type="x-shader/x-fragment" id="fragment-shader">
       varying vec3 vColor;
       void main() {
@@ -707,7 +704,7 @@
         Array(n)
           .fill(0)
           .map((i, j) => i + j);
-      
+
       const sum = (arr) => arr.reduce((acc, cur) => acc + cur, 0);
       const slicedSum = (arr, i) => sum(arr.slice(0, i));
       const pointsOnSphere = (n) => {
@@ -724,26 +721,26 @@
         });
         return pts;
       };
-      
+
       const numMap = (value, sMin, sMax, dMin, dMax) => {
         return dMin + ((value - sMin) / (sMax - sMin)) * (dMax - dMin);
       };
-      
+
       const colArray = [0x0FE9C4, 0x3BC3F3, 0xad78ed, 0xf3a5f3];
       colArray.reverse();
       let camera, controls, scene, renderer, cloud, composer, bloomPass, meshPlanet;
       const uniforms = {
         time: { type: "f", value: 1.0 }
       };
-      
+
       let { innerWidth, innerHeight } = window;
       let canvasSize = min(innerWidth, innerHeight);
 
       let zoom = 500;
-            
+
       init();
       animate();
-      
+
       function init() {
         scene = new THREE.Scene();
         if(window.devicePixelRatio > 1) {
@@ -776,11 +773,11 @@
         camera = new THREE.PerspectiveCamera(60, 1, 1, 800);
 
         camera.position.set(128, 90, zoom);
-      
+
         controls = new THREE.OrbitControls(camera, renderer.domElement);
-            
+
         const renderScene = new THREE.RenderPass(scene, camera);
-      
+
         bloomPass = new THREE.UnrealBloomPass(
           new THREE.Vector2(canvasSize, canvasSize),
           1.5,
@@ -796,7 +793,7 @@
         createObjects();
         window.addEventListener("resize", onWindowResize, false);
       }
-      
+
       function onWindowResize() {
         el=document.getElementById("canvas-wrap");
 
@@ -825,17 +822,17 @@
         innerHeight = window.innerHeight;
         composer.setSize(canvasSize, canvasSize);
       }
-      
+
       function animate(time) {
         uniforms.time.value = time;
         requestAnimationFrame(animate);
         render();
       }
-      
+
       function render() {
         composer.render();
       }
-      
+
       function createObjects() {
         const layers = range(6).map((i) => canvasSize * pow(2, i + 1));
         layers.reverse();
@@ -858,11 +855,11 @@
             color.toArray(colors, index * 3);
           });
         });
-      
+
         const geometry = new THREE.BufferGeometry();
         geometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
         geometry.setAttribute("customColor", new THREE.BufferAttribute(colors, 3));
-      
+
         const material = new THREE.ShaderMaterial({
           uniforms,
           vertexShader: document.querySelector("#vertex-shader").textContent,
@@ -874,7 +871,7 @@
         cloud = new THREE.Points(geometry, material);
         scene.add(cloud);
       }
-    
+
       </script>
 
     </div>
@@ -887,7 +884,7 @@
           <div class="menu">
             <a data="#about" href="#about" class="tabber menu-item mr-1">About</a>
             <a data="#faq" href="#faq" class="tabber menu-item">FAQ</a>
-            <a href="https://github.com/mediafoundation/mediaserver" target="_blank" rel="noopener" class="ml-1 menu-item md-down"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="css-885coq"><mask id="github-logo-mask0-nav" mask-type="alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24"><path fill-rule="evenodd" clip-rule="evenodd" d="M11.9989 0C5.37328 0 0 5.50851 0 12.3041C0 17.7401 3.43804 22.3513 8.20651 23.9782C8.8069 24.0915 9.02569 23.7116 9.02569 23.3853C9.02569 23.093 9.01538 22.3195 9.00948 21.2931C5.67163 22.0363 4.96737 19.6435 4.96737 19.6435C4.4215 18.222 3.63473 17.8435 3.63473 17.8435C2.5452 17.0807 3.71724 17.0958 3.71724 17.0958C4.9217 17.1826 5.55524 18.3639 5.55524 18.3639C6.62562 20.2439 8.36416 19.7009 9.04779 19.3859C9.15682 18.5913 9.46696 18.049 9.80951 17.7416C7.14497 17.4311 4.34341 16.3752 4.34341 11.6605C4.34341 10.3176 4.8112 9.21861 5.57881 8.35906C5.45505 8.04787 5.04325 6.79632 5.69668 5.1029C5.69668 5.1029 6.70371 4.77207 8.99622 6.36428C9.95316 6.09085 10.9801 5.9549 12.0004 5.94961C13.0199 5.9549 14.0461 6.09085 15.0045 6.36428C17.2956 4.77207 18.3011 5.1029 18.3011 5.1029C18.956 6.79632 18.5442 8.04787 18.4212 8.35906C19.1903 9.21861 19.6544 10.3176 19.6544 11.6605C19.6544 16.3873 16.8484 17.4274 14.1758 17.7318C14.606 18.1117 14.9898 18.8625 14.9898 20.0098C14.9898 21.6549 14.975 22.9819 14.975 23.3853C14.975 23.7146 15.1916 24.0975 15.8001 23.9774C20.5649 22.3467 24 17.7385 24 12.3041C24 5.50851 18.6267 0 11.9989 0" fill="white"></path></mask><g mask="url(#github-logo-mask0-nav)"><path d="M24 0H0V24H24V0Z" fill="white"></path></g></svg></a>
+            <a href="https://github.com/mediafoundation/media-server" target="_blank" rel="noopener" class="ml-1 menu-item md-down"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="css-885coq"><mask id="github-logo-mask0-nav" mask-type="alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24"><path fill-rule="evenodd" clip-rule="evenodd" d="M11.9989 0C5.37328 0 0 5.50851 0 12.3041C0 17.7401 3.43804 22.3513 8.20651 23.9782C8.8069 24.0915 9.02569 23.7116 9.02569 23.3853C9.02569 23.093 9.01538 22.3195 9.00948 21.2931C5.67163 22.0363 4.96737 19.6435 4.96737 19.6435C4.4215 18.222 3.63473 17.8435 3.63473 17.8435C2.5452 17.0807 3.71724 17.0958 3.71724 17.0958C4.9217 17.1826 5.55524 18.3639 5.55524 18.3639C6.62562 20.2439 8.36416 19.7009 9.04779 19.3859C9.15682 18.5913 9.46696 18.049 9.80951 17.7416C7.14497 17.4311 4.34341 16.3752 4.34341 11.6605C4.34341 10.3176 4.8112 9.21861 5.57881 8.35906C5.45505 8.04787 5.04325 6.79632 5.69668 5.1029C5.69668 5.1029 6.70371 4.77207 8.99622 6.36428C9.95316 6.09085 10.9801 5.9549 12.0004 5.94961C13.0199 5.9549 14.0461 6.09085 15.0045 6.36428C17.2956 4.77207 18.3011 5.1029 18.3011 5.1029C18.956 6.79632 18.5442 8.04787 18.4212 8.35906C19.1903 9.21861 19.6544 10.3176 19.6544 11.6605C19.6544 16.3873 16.8484 17.4274 14.1758 17.7318C14.606 18.1117 14.9898 18.8625 14.9898 20.0098C14.9898 21.6549 14.975 22.9819 14.975 23.3853C14.975 23.7146 15.1916 24.0975 15.8001 23.9774C20.5649 22.3467 24 17.7385 24 12.3041C24 5.50851 18.6267 0 11.9989 0" fill="white"></path></mask><g mask="url(#github-logo-mask0-nav)"><path d="M24 0H0V24H24V0Z" fill="white"></path></g></svg></a>
           </div>
         </div>
       </header>
@@ -905,9 +902,9 @@
                   <p>Your channel was successfully created. Now you can publish the stream using a software like <a href="https://obsproject.com/" target="_blank" rel="noopener nofollow">OBS</a>, <a href="https://ffmpeg.org/FFmpeg" target="_blank" rel="noopener nofollow">FFmpeg</a> or any rtmp encoder. More info on the <a href="#faq" target="_blank" class="tabber" data="#faq">FAQ page.</a></p>
                   <button class="btn start loading done" disabled style="background: #3bc3f3;"><svg class="checkmark" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 1000 1000" style="enable-background:new 0 0 1000 1000;" xml:space="preserve"><path d="M565,271.3c-39.3,0-71.2-31.9-71.2-71.2s31.9-71.2,71.2-71.2c39.3,0,71.2,31.9,71.2,71.2S604.3,271.3,565,271.3z M385.5,396.4c0-5.8,0-11.7,0-17.4c56.5-22.5,143.6-14.2,201.9-34.8c2.4,0,4.6,0,6.9,0c-28.1,142.6-87.5,272.2-101,417.8 c3.2,2.5,2.8,1.9,6.9,3.4c43.8,14.7,69-87.1,97.5-80.1c28.6,7.1-17.9,57.7-24.4,66.2c-25.5,33.4-74.4,90.2-132.3,90.5 c-40.9,0.2-83.2-25.5-76.6-93.9c6.7-68.5,45.1-163.9,66.2-240.3C447.6,446.2,469.5,394.7,385.5,396.4z"></path></svg></button> <span class="ok show">Channel information</span>
                   <ul class="key">
-                    <li><span><strong>Ingest Server:</strong> rtmp://ingest.mediaserver.express/live/</span></li>
-                    <li><span><strong>Ingest Path:</strong> <%= key %></span></li>
-                    <li><span><strong>Play URL:</strong> <a href="https://mediaserver.express/v/<%= name %>" target="_blank">https://mediaserver.express/v/<%= name %></a></span></li>
+                    <li><span><strong>RTMP Server:</strong> <%= rtmp_url %>/live/</span></li>
+                    <li><span><strong>Stream Key:</strong> <%= key %></span></li>
+                    <li><span><strong>Play URL:</strong> <a href="<%= cdn_url %>/v/<%= name %>" target="_blank"><%= cdn_url %>/v/<%= name %></a></span></li>
                   </ul>
                 </div>
               </div>
@@ -915,44 +912,44 @@
             <div id="faq" class="tab-pane">
               <h2 class="title">FAQ</h2>
               <h3 class="acordioner" data="#how">How does MSE work?</h3>
-              <p id="how" class="acordion-pane">When you broadcast media content using mediaserver.express, your data is sent to our Media Server ingest software. This software transcodes the ingested data, which is the process of taking a raw live video/audio and reformatting it to make it available for any device. Once the stream is reformatted, it gets pulled from <a href="https://medianet.work" target="_blank">Media Network</a>’s infrastructure for last-mile delivery to the end users, which will be also sharing bandwidth with each other based on location and latency. Detailed information on how it works can be found <a href="https://docs.medianet.work/testnet-basic" target="_blank">here</a>.</p>
+              <p id="how" class="acordion-pane">When you broadcast media content using mediaserver.express, your data is sent to our Media Server ingest software. This software transcodes the ingested data, which is the process of taking a raw live video/audio and reformatting it to make it available for any device. Once the stream is reformatted, it gets pulled from <a href="https://media.network" target="_blank">Media Network</a>’s infrastructure for last-mile delivery to the end users, which will be also sharing bandwidth with each other based on location and latency, as the example has Media PeerPool included.</a></p>
               <h3 class="acordioner" data="#limits">Is there any limit in concurrent users or bandwidth?</h3>
-              <p id="limits" class="acordion-pane">No. You can push it as far as you can. If you think you have enough traffic to break our platform, please contact us for business opportunities. 😜</p>
+              <p id="limits" class="acordion-pane">No. You can push it as far as you can.</p>
 
               <h3 class="acordioner" data="#fees">Who pays for the infrastructure?</h3>
-              <p id="fees" class="acordion-pane">Streaming and bandwidth fees are subsidized by Media Foundation.</p>
+              <p id="fees" class="acordion-pane">Streaming and bandwidth fees are subsidized by the Media Foundation.</p>
 
               <h3 class="acordioner" data="#earns">Who earns the subsidized fees?</h3>
-              <p id="earns" class="acordion-pane"><a href="https://medianet.work" target="_blank">Media Network</a> is made up of many different computers run by many different people and organizations. Different actors within these networks earn a portion of the streaming and bandwidth fees sent by mediaserver.express on your behalf.</p>
+              <p id="earns" class="acordion-pane"><a href="https://media.network" target="_blank">Media Network</a> is made up of many different computers run by many different people and organizations. Different actors within these networks earn a portion of the streaming and bandwidth fees sent by mediaserver.express on your behalf.</p>
 
               <h3 class="acordioner" data="#own">Is it possible to run my own Media Server?</h3>
-              <p id="own" class="acordion-pane">You can run a self-hosted instance of this software where your own rules apply. Source code and instructions available <a href="https://docs.medianet.work/ms-setup" target="_blank">here</a>.</p>
+              <p id="own" class="acordion-pane">You can run a self-hosted instance of this software where your own rules apply. Github repo is available <a href="https://github.com/mediafoundation/media-server" target="_blank">here</a>
             </div>
             <div id="about" class="tab-pane">
               <h2 class="title">What is Media Server Express?</h2>
-               <p>Media Server Express is an open source, decentralized and censorship-resistant live streaming hosting solution built using <a href="https://docs.medianet.work/mediaserver" target="_blank">Media Server</a> and powered by <a href="https://medianet.work" target="_blank">Media Network</a>, the first fully decentralized live streaming network. Our service is free and there’s no signup or KYC required.</p>
-               <p>Made with ❤️ and lots of ☕️ by <a href="https://media.foundation" target="_blank">Media Foundation</a></p>
+               <p>Media Server Express is an open source, decentralized and censorship-resistant live streaming hosting solution built using <a href="https://github.com/mediafoundation/media-server" target="_blank">Media Server</a> and powered by <a href="https://media.network" target="_blank">Media Network.</a> Our service is free and there’s no signup or KYC required.</p>
+               <p>Made with ❤️ and lots of ☕️ by <a href="https://twitter.com/Media_FDN" target="_blank">Media Foundation</a></p>
 
             </div>
           </div>
         </main>
         <footer>
           <div class="inner-footer">
-            Powered by &nbsp; <a href="https://medianet.work" target="_blank" rel="noopener"><img src="/static/images/medianetwork.svg" alt="Media Network Logo"><strong>Media Network</strong></a>
+            Powered by &nbsp; <a href="https://twitter.com/Media_FDN" target="_blank" rel="noopener"><img src="/static/images/medianetwork.svg" alt="Media Network Logo"><strong>Media Network</strong></a>
           </div>
           <div class="inner-footer">
-            <a href="https://github.com/mediafoundation/mediaserver" target="_blank" rel="noopener" class="md-up"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="css-5ronwr"><mask id="github-logo-mask0-undefined" mask-type="alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24"><path fill-rule="evenodd" clip-rule="evenodd" d="M11.9989 0C5.37328 0 0 5.50851 0 12.3041C0 17.7401 3.43804 22.3513 8.20651 23.9782C8.8069 24.0915 9.02569 23.7116 9.02569 23.3853C9.02569 23.093 9.01538 22.3195 9.00948 21.2931C5.67163 22.0363 4.96737 19.6435 4.96737 19.6435C4.4215 18.222 3.63473 17.8435 3.63473 17.8435C2.5452 17.0807 3.71724 17.0958 3.71724 17.0958C4.9217 17.1826 5.55524 18.3639 5.55524 18.3639C6.62562 20.2439 8.36416 19.7009 9.04779 19.3859C9.15682 18.5913 9.46696 18.049 9.80951 17.7416C7.14497 17.4311 4.34341 16.3752 4.34341 11.6605C4.34341 10.3176 4.8112 9.21861 5.57881 8.35906C5.45505 8.04787 5.04325 6.79632 5.69668 5.1029C5.69668 5.1029 6.70371 4.77207 8.99622 6.36428C9.95316 6.09085 10.9801 5.9549 12.0004 5.94961C13.0199 5.9549 14.0461 6.09085 15.0045 6.36428C17.2956 4.77207 18.3011 5.1029 18.3011 5.1029C18.956 6.79632 18.5442 8.04787 18.4212 8.35906C19.1903 9.21861 19.6544 10.3176 19.6544 11.6605C19.6544 16.3873 16.8484 17.4274 14.1758 17.7318C14.606 18.1117 14.9898 18.8625 14.9898 20.0098C14.9898 21.6549 14.975 22.9819 14.975 23.3853C14.975 23.7146 15.1916 24.0975 15.8001 23.9774C20.5649 22.3467 24 17.7385 24 12.3041C24 5.50851 18.6267 0 11.9989 0" fill="white"></path></mask><g mask="url(#github-logo-mask0-undefined)"><path d="M24 0H0V24H24V0Z" fill="white"></path></g></svg>github.com/mediafoundation/mediaserver</a></div></footer>
+            <a href="https://github.com/mediafoundation/media-server" target="_blank" rel="noopener" class="md-up"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="css-5ronwr"><mask id="github-logo-mask0-undefined" mask-type="alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24"><path fill-rule="evenodd" clip-rule="evenodd" d="M11.9989 0C5.37328 0 0 5.50851 0 12.3041C0 17.7401 3.43804 22.3513 8.20651 23.9782C8.8069 24.0915 9.02569 23.7116 9.02569 23.3853C9.02569 23.093 9.01538 22.3195 9.00948 21.2931C5.67163 22.0363 4.96737 19.6435 4.96737 19.6435C4.4215 18.222 3.63473 17.8435 3.63473 17.8435C2.5452 17.0807 3.71724 17.0958 3.71724 17.0958C4.9217 17.1826 5.55524 18.3639 5.55524 18.3639C6.62562 20.2439 8.36416 19.7009 9.04779 19.3859C9.15682 18.5913 9.46696 18.049 9.80951 17.7416C7.14497 17.4311 4.34341 16.3752 4.34341 11.6605C4.34341 10.3176 4.8112 9.21861 5.57881 8.35906C5.45505 8.04787 5.04325 6.79632 5.69668 5.1029C5.69668 5.1029 6.70371 4.77207 8.99622 6.36428C9.95316 6.09085 10.9801 5.9549 12.0004 5.94961C13.0199 5.9549 14.0461 6.09085 15.0045 6.36428C17.2956 4.77207 18.3011 5.1029 18.3011 5.1029C18.956 6.79632 18.5442 8.04787 18.4212 8.35906C19.1903 9.21861 19.6544 10.3176 19.6544 11.6605C19.6544 16.3873 16.8484 17.4274 14.1758 17.7318C14.606 18.1117 14.9898 18.8625 14.9898 20.0098C14.9898 21.6549 14.975 22.9819 14.975 23.3853C14.975 23.7146 15.1916 24.0975 15.8001 23.9774C20.5649 22.3467 24 17.7385 24 12.3041C24 5.50851 18.6267 0 11.9989 0" fill="white"></path></mask><g mask="url(#github-logo-mask0-undefined)"><path d="M24 0H0V24H24V0Z" fill="white"></path></g></svg>github.com/mediafoundation/media-server</a></div></footer>
       </div>
     </div>
     <script>
-      function loadstart() { 
-        
+      function loadstart() {
+
       }
 
-      
+
       document.addEventListener("DOMContentLoaded", function(){
         var el = document.querySelector('.start');
-        el.addEventListener('click', function() { 
+        el.addEventListener('click', function() {
           window.onbeforeunload = function(e) {
               return "After closing this window you won't be able to retrieve your stream key anymore. Are you sure you want to leave?";
           };
@@ -980,7 +977,7 @@
           for (var i = 0; i < myTabs.length; i++) {
             myTabs[i].classList.remove("active");
           }
-          var clickedTab = tabClickEvent.currentTarget; 
+          var clickedTab = tabClickEvent.currentTarget;
           clickedTab.classList.add("active");
           tabClickEvent.preventDefault();
           var myContentPanes = document.querySelectorAll(".tab-pane");
@@ -1007,7 +1004,7 @@
             myAccordionPanes[i].classList.remove("active");
             myAccordionPanes[i].style.height = "0";
           }
-          var clickedAccordion = accordionClickEvent.currentTarget; 
+          var clickedAccordion = accordionClickEvent.currentTarget;
           clickedAccordion.classList.add("active");
           accordionClickEvent.preventDefault();
           var anchorReference = accordionClickEvent.target;

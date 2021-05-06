@@ -13,6 +13,7 @@ const HTTPS_PORT = 443;
 const HTTP_MEDIAROOT = './media';
 const Logger = require('./node_core_logger');
 const context = require('./node_core_ctx');
+const ip = require("ip");
 
 const streamsRoute = require('./api/routes/streams');
 const serverRoute = require('./api/routes/server');
@@ -24,6 +25,13 @@ class NodeHttpServer {
     this.mediaroot = config.http.mediaroot || HTTP_MEDIAROOT;
     this.config = config;
 
+    if(this.config.cdn_url === false){
+      this.config.cdn_url = "http://"+ip.address();
+    } 
+    if(this.config.rtmp_url === false){
+      this.config.rtmp_url = "rtmp://"+ip.address();
+    } 
+
     let app = Express();
     app.use(bodyParser.json());
 
@@ -34,7 +42,7 @@ class NodeHttpServer {
 
     app.all('*', (req, res, next) => {
       res.header("Access-Control-Allow-Origin", this.config.http.allow_origin);
-      res.header("Access-Control-Allow-Headers", "Content-Type,Content-Length, Authorization, Accept,X-Requested-With");
+      res.header("Access-Control-Allow-Headers", "Content-Length,Authorization,Accept,DNT,X-Mx-ReqToken,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range");
       res.header("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");
       res.header("Access-Control-Allow-Credentials", true);
       req.method === "OPTIONS" ? res.sendStatus(200) : next();
@@ -61,11 +69,11 @@ class NodeHttpServer {
       }
       var md5 = CryptoJS.SHA256(this.config.passphrase+"/live/"+name).toString();
       var key = name+"?pwd="+md5.substring(0,6);
-      res.render("views/index.html", {name:name,key:key});
+      res.render("views/index.html", {name:name,key:key,rtmp_url:this.config.rtmp_url,cdn_url:this.config.cdn_url});
     });
     
     app.get('/v/:id', (req, res) => {
-      res.render("views/channel.html", {name:req.params.id});
+      res.render("views/channel.html", {name:req.params.id,cdn_url:this.config.cdn_url});
     });
     
     if (this.config.http.api !== false) {
