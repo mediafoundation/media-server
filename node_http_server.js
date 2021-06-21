@@ -40,11 +40,21 @@ class NodeHttpServer {
     app.set('view engine', 'html');
     app.set('views', __dirname);
 
-    app.all('*', (req, res, next) => {
+    app.all('*.ts', (req, res, next) => {
       res.header("Access-Control-Allow-Origin", this.config.http.allow_origin);
       res.header("Access-Control-Allow-Headers", "Content-Length,Authorization,Accept,DNT,X-Mx-ReqToken,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range");
-      res.header("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");
+      res.header("Access-Control-Allow-Methods", "GET,OPTIONS");
       res.header("Access-Control-Allow-Credentials", true);
+      res.header("Cache-Control", "public,max-age=5m,s-maxage=5m");
+      req.method === "OPTIONS" ? res.sendStatus(200) : next();
+    });
+
+    app.get('*.m3u8', (req, res, next) => {
+      res.header("Access-Control-Allow-Origin", this.config.http.allow_origin);
+      res.header("Access-Control-Allow-Headers", "Content-Length,Authorization,Accept,DNT,X-Mx-ReqToken,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range");
+      res.header("Access-Control-Allow-Methods", "GET,OPTIONS");
+      res.header("Access-Control-Allow-Credentials", true);
+      res.header("Cache-Control", "public,max-age=5s,s-maxage=5s");
       req.method === "OPTIONS" ? res.sendStatus(200) : next();
     });
 
@@ -61,6 +71,7 @@ class NodeHttpServer {
     }
 
     app.get('/', (req, res) => {
+      res.header("Cache-Control", "no-store, max-age=0");
       var name = '';
       var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
       var charactersLength = characters.length;
