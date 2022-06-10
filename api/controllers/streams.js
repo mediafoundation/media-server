@@ -1,5 +1,7 @@
 const _ = require("lodash");
 const NodeTransServer = require("../../node_trans_server");
+const fs = require('fs');
+const path = require('path');
 
 function postStreamTrans(req, res, next) {
   let config = req.body;
@@ -150,6 +152,33 @@ function getStream(req, res, next) {
   res.json(streamStats);
 }
 
+function addToBlacklist(ip){
+    // read the file
+  let file = path.join(__dirname + '../../../blacklist.json');
+  fs.readFile(file, 'utf8', (err, data) => {
+
+    if (err) {
+        console.log(`Error reading file from disk: ${err}`);
+    } else {
+      let blacklist;
+      try {
+        blacklist = JSON.parse(data)
+      } catch (_) {
+        blacklist = []
+      }
+      // add a new record
+      blacklist.push(ip);
+
+      // write new data back to the file
+      fs.writeFile(file, JSON.stringify(blacklist, null, 4), (err) => {
+          if (err) {
+              console.log(`Error writing file: ${err}`);
+          }
+      });
+    }
+  });
+}
+
 function delStream(req, res, next) {
   let publishStreamPath = `/${req.params.app}/${req.params.stream}`;
   let publisherSession = this.sessions.get(
@@ -157,6 +186,7 @@ function delStream(req, res, next) {
   );
 
   if (publisherSession) {
+    addToBlacklist(publisherSession.socket.remoteAddress);
     publisherSession.stop();
     res.json("ok");
   } else {

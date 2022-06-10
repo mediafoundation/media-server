@@ -47,7 +47,7 @@ http://YOUR.IP.ADDRESS/
 
 ### Using Media Network to scale your Media Server
 
-Optionally, to scale up your streaming plaform to million of users and make it available through a truly powerful and decentralized CDN, you can register your server as a resource on Media Network through the [Media Network App](https://app.media.network). Follow [this tutorial](https://docs.media.network/app-setup) using your server IP address as the origin server to do so.
+Optionally, to scale up your streaming plaform to million of users and make it available through a truly powerful and decentralized CDN, you can register your server as a resource on Media Network through the [Media Network App](https://app.media.network). Follow [this tutorial](https://docs.media.network/app-setup) using your server IP address as$
 
 #### Editing the config to use your generated Media Network subdomain
 
@@ -69,8 +69,17 @@ Make sure to restart your Media Server instance after editing the configuration 
 :::
 
 
+#### Removing a stream
+
+```bash
+curl -X "DELETE" http://admin:admin@localhost/api/streams/live/STREAM_NAME
+```
+
 ---
 
 ### Credits
 
 Media Server is a fork of illuspas' [Node-Media-Server](https://github.com/illuspas/Node-Media-Server), a Node.js modified implementation of RTMP/HTTP-FLV/WS-FLV/HLS/DASH Media Server Based on Arut's [nginx RTMP Module](https://github.com/arut/nginx-rtmp-module).
+
+
+
