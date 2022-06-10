@@ -47,7 +47,9 @@ http://YOUR.IP.ADDRESS/
 
 ### Using Media Network to scale your Media Server
 
-Optionally, to scale up your streaming plaform to million of users and make it available through a truly powerful and decentralized CDN, you can register your server as a resource on Media Network through the [Media Network App](https://app.media.network). Follow [this tutorial](https://docs.media.network/app-setup) using your server IP address as$
+Optionally, to scale up your streaming plaform to million of users and make it available through a truly powerful and decentralized CDN, you can register your server as a resource on Media Network through the [Media Network App](https://app.media.network). 
+
+Follow [this tutorial](https://docs.media.network/ms-media) using your server IP address.
 
 #### Editing the config to use your generated Media Network subdomain
 
