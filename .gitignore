@@ -1,2 +1,4 @@
 node_modules/
 media/
+config.js
+blacklist.json
