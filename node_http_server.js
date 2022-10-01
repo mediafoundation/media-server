@@ -25,10 +25,10 @@ class NodeHttpServer {
     this.mediaroot = config.http.mediaroot || HTTP_MEDIAROOT;
     this.config = config;
 
-    if(this.config.cdn_url === false){
-      this.config.cdn_url = "http://"+ip.address();
+    if(!this.config.cdn_url){
+      this.config.cdn_url = false;
     } 
-    if(this.config.rtmp_url === false){
+    if(!this.config.rtmp_url){
       this.config.rtmp_url = "rtmp://"+ip.address();
     } 
 
@@ -80,7 +80,15 @@ class NodeHttpServer {
       }
       var md5 = CryptoJS.SHA256(this.config.passphrase+"/live/"+name).toString();
       var key = name+"?pwd="+md5.substring(0,6);
-      res.render("views/index.html", {name:name,key:key,rtmp_url:this.config.rtmp_url,cdn_url:this.config.cdn_url});
+      res.render(
+        "views/index.html", 
+        {
+          name:name,
+          key:key,
+          rtmp_url:this.config.rtmp_url,
+          cdn_url:this.config.cdn_url
+        }
+      );
     });
     
     app.get('/v/:id', (req, res) => {
