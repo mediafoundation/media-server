@@ -911,8 +911,8 @@
                           <script type="text/javascript">
                             var cdn_url = "<%= cdn_url %>";
 	                    if(!cdn_url) cdn_url = window.location.protocol + "//" + window.location.host;
-			    document.write(cdn_url);
-			  </script>/v/<%= name %>
+			    document.write(cdn_url+ "/v/<%= name %>");
+			  </script>
                         </a>
                       </span>
                     </li>
