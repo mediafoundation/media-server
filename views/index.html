@@ -910,10 +910,9 @@
                         <a href="<%= cdn_url %>/v/<%= name %>" target="_blank">
                           <script type="text/javascript">
                             var cdn_url = "<%= cdn_url %>";
-	                          if(!cdn_url) cdn_url = window.location.protocol + "//" + window.location.host;
-                            document.write(cdn_url);
-                          </script>
-                          /v/<%= name %>
+	                    if(!cdn_url) cdn_url = window.location.protocol + "//" + window.location.host;
+			    document.write(cdn_url);
+			  </script>/v/<%= name %>
                         </a>
                       </span>
                     </li>
