@@ -904,7 +904,19 @@
                   <ul class="key">
                     <li><span><strong>RTMP Server:</strong> <%= rtmp_url %>/live/</span></li>
                     <li><span><strong>Stream Key:</strong> <%= key %></span></li>
-                    <li><span><strong>Play URL:</strong> <a href="<%= cdn_url %>/v/<%= name %>" target="_blank"><%= cdn_url %>/v/<%= name %></a></span></li>
+                    <li>
+                      <span>
+                        <strong>Play URL:</strong> 
+                        <a href="<%= cdn_url %>/v/<%= name %>" target="_blank">
+                          <script type="text/javascript">
+                            var cdn_url = "<%= cdn_url %>";
+	                          if(!cdn_url) cdn_url = window.location.protocol + "//" + window.location.host;
+                            document.write(cdn_url);
+                          </script>
+                          /v/<%= name %>
+                        </a>
+                      </span>
+                    </li>
                   </ul>
                 </div>
               </div>
