@@ -379,8 +379,8 @@
 
             var videoUrlForm = document.getElementById("videoUrlForm");
 	    var cdn_url = "<%= cdn_url %>";
-	    if(!cdn_url) cdn_url = window.location.host;
-            this.videoUrl = 'https://' + cdn_url + videoUrlForm.url.value.trim();
+	    if(!cdn_url) cdn_url = window.location.protocol + "//" + window.location.host;
+            this.videoUrl = cdn_url + videoUrlForm.url.value.trim();
             this.playerType = videoUrlForm.type.value;
             this.videoContainer = document.getElementById("video_container");
 
