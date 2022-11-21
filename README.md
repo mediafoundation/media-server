@@ -14,7 +14,8 @@ apt install -y nodejs
 ### Install FFmpeg
 ```bash
 cd /tmp; \
-wget https://media.network/static/ffmpeg-release-amd64-static.tar.xz; \
+rm -r ffmpeg*; \
+wget https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz; \
 tar xvf ffmpeg-release-amd64-static.tar.xz; \
 cd /tmp/ffmpeg-*/; \
 mv ffmpeg ffprobe /usr/bin/;
@@ -44,10 +45,22 @@ http://YOUR.IP.ADDRESS/
 ```
 [ ![Home Page](https://docs.media.network/img/mediaserverexp.png) ](https://docs.media.network/img/mediaserverexp.png)
 
+### Securing the server
+In order to prevent unauthorized users to stream to your RTMP server, it's recommended to change the default secret passphrase. This passphrase is utilized to create safe stream keys.
+
+```bash
+nano config.js
+```
+
+```js title="mediaserver/config.js"
+const config = {
+  passphrase: "My Secret Passphrase",
+//...
+```
 
 ### Using Media Network to scale your Media Server
 
-Optionally, to scale up your streaming plaform to million of users and make it available through a truly powerful and decentralized CDN, you can register your server as a resource on Media Network through the [Media Network App](https://app.media.network). 
+Optionally, to scale up your streaming plaform to million of users and make it available through a truly powerful and decentralized CDN, you can add your server as a resource on Media Network through the [Media Network App](https://app.media.network). 
 
 Follow [this tutorial](https://docs.media.network/ms-media) using your server IP address.
 
@@ -62,7 +75,7 @@ nano config.js
 ```js title="mediaserver/config.js"
 const config = {
 //...
-  cdn_url: "https://Resource_ID.medianet.work",
+  cdn_url: "https://Resource_ID.medianetwork.cloud",
 //...
 ```
 
@@ -77,11 +90,26 @@ Make sure to restart your Media Server instance after editing the configuration 
 curl -X "DELETE" http://admin:admin@localhost/api/streams/live/STREAM_NAME
 ```
 
+### Admin Panel
+
+Media Server comes with an admin panel and an API installed by default. Through this panel you'll be able to check streams and network usage details. It can be accessed through any web browser using the following URL:
+```
+http://YOUR.IP.ADDRESS:8080/admin
+```
+
+Admin Username and Password can be set-up by editing the config.js file and restarting the Media Server instance.
+
+  ```js title="mediaserver/config.js"
+//...
+  auth: {
+    api : true,
+    api_user: 'admin',
+    api_pass: 'admin',
+  },
+//...
+```
 ---
 
 ### Credits
 
 Media Server is a fork of illuspas' [Node-Media-Server](https://github.com/illuspas/Node-Media-Server), a Node.js modified implementation of RTMP/HTTP-FLV/WS-FLV/HLS/DASH Media Server Based on Arut's [nginx RTMP Module](https://github.com/arut/nginx-rtmp-module).
-
-
-
