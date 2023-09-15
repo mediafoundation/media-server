@@ -2,3 +2,4 @@ node_modules/
 media/
 config.js
 blacklist.json
+views/.DS_Store
