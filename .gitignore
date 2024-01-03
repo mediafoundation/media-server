@@ -4,3 +4,4 @@ config.js
 blacklist.json
 views/.DS_Store
 .DS_Store
+config.js
